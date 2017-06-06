@@ -1,0 +1,14 @@
+Package: RegressionImpact
+Type: Package
+Title: How Important is Each Predictor?
+Version: 0.1.0
+Author: Andrew McCarthy
+Maintainer: Andrew McCarthy <andrew.mccarthy@theperducogroup.com>
+Description: This package generates ggplot2-style plots for visualizing which 
+  explanatory variables have the most predictive ability in a regression. The most
+  important function takes an lm() object as input and returns the plot object.
+Imports: ggplot2
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1
