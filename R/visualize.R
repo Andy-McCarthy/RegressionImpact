@@ -66,10 +66,10 @@ visualize <- function(model, measure = "P") {
   # plot results
   gg.p <- ggplot2::ggplot(pct, ggplot2::aes(x = impact, y = num)) +
     ggplot2::geom_text(ggplot2::aes(label=pct$name, size = 14)) +
-    ggplot2::scale_x_continuous(breaks = seq(from = min(-1,min(pct$impact),
-                                                        to = max(1,max(pct$impact)), by = 0.2)),
+    ggplot2::scale_x_continuous(breaks = seq(from = min(-1,-max(abs(pct$impact))),
+                                                        to = max(1,max(abs(pct$impact)), by = 0.2)),
                                 limits = c(min(-1,-max(abs(pct$impact))-.1),
-                                           max(-1,max(abs(pct$impact))+.1))) +
+                                           max(1,max(abs(pct$impact))+.1))) +
     ggplot2::scale_y_discrete(limits = c(0,model$rank)) +
     ggplot2::xlab(NULL) + ggplot2::ylab(NULL) +
     ggplot2::theme(axis.text.y = ggplot2::element_blank()) +
