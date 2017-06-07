@@ -12,12 +12,15 @@
 #' @examples
 #' X <- runif(500,1,5)
 #' Y <- runif(500,6,10)
+#' Z <- runif(500,-5,0)
 #'
 #' W <- rnorm(500,X+2*Y,5)
 #'
-#' model <- lm(W~X+Y)
+#' model <- lm(W~X+Y+Z)
 #'
 #' visualize(model)
+#' visualize(model, measure = "C")
+#' visualize(model, "T")
 #'
 #' @export
 
@@ -44,11 +47,12 @@ visualize <- function(model, measure = "P") {
       }
     }
   } else if (measure == "C") {
-    imp <- coef(model)[2:model$rank]
+    imp <- model$coefficients[2:model$rank]
   } else if (measure == "T") {
     imp <- coef(model)[2:model$rank]/mean(model$fitted.values)
   } else {
-    message("For the measure argument, please enter 'P' for P-values or 'C' for coefficients.")
+    message("For the measure argument, please enter 'P' for P-values, 'C' for coefficients,")
+    message("or 'T' for percent change.")
     return()
   }
 
@@ -61,9 +65,11 @@ visualize <- function(model, measure = "P") {
 
   # plot results
   gg.p <- ggplot2::ggplot(pct, ggplot2::aes(x = impact, y = num)) +
-    ggplot2::geom_text(ggplot2::aes(label=name, size = 14)) +
-    ggplot2::scale_x_continuous(breaks = seq(from = -1, to = 1, by = 0.2),
-                                limits = c(-1.1, 1.1)) +
+    ggplot2::geom_text(ggplot2::aes(label=pct$name, size = 14)) +
+    ggplot2::scale_x_continuous(breaks = seq(from = min(-1,min(pct$impact),
+                                                        to = max(1,max(pct$impact)), by = 0.2)),
+                                limits = c(min(-1,-max(abs(pct$impact))-.1),
+                                           max(-1,max(abs(pct$impact))+.1))) +
     ggplot2::scale_y_discrete(limits = c(0,model$rank)) +
     ggplot2::xlab(NULL) + ggplot2::ylab(NULL) +
     ggplot2::theme(axis.text.y = ggplot2::element_blank()) +

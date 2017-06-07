@@ -22,11 +22,14 @@ figure.
 \examples{
 X <- runif(500,1,5)
 Y <- runif(500,6,10)
+Z <- runif(500,-5,0)
 
-W <- rnorm(500,X+Y,5)
+W <- rnorm(500,X+2*Y,5)
 
-model <- lm(W~X+Y)
+model <- lm(W~X+Y+Z)
 
 visualize(model)
+visualize(model, measure = "C")
+visualize(model, "T")
 
 }
