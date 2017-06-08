@@ -4,12 +4,14 @@
 \alias{visualize}
 \title{Visualize Regression Variables}
 \usage{
-visualize(model, measure = "P")
+visualize(model, measure = "P", signif = 0.05)
 }
 \arguments{
 \item{model}{an lm() object}
 
-\item{measure}{use P-values (P), coefficients (C), or percent change (T) to construct plot}
+\item{measure}{use P-values (P) or coefficients (C) to construct plot}
+
+\item{signif}{significance level for P-values}
 }
 \value{
 a ggplot2 object
@@ -24,12 +26,12 @@ X <- runif(500,1,5)
 Y <- runif(500,6,10)
 Z <- runif(500,-5,0)
 
-W <- rnorm(500,X+2*Y,5)
+W <- rnorm(500,2*Y-X,5)
 
 model <- lm(W~X+Y+Z)
 
 visualize(model)
+visualize(model, signif = 0.1)
 visualize(model, measure = "C")
-visualize(model, "T")
 
 }
