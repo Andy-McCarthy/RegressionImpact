@@ -91,7 +91,8 @@ visualize <- function(model, measure = "P", signif = 0.05) {
       ggplot2::geom_point(data = pct, ggplot2::aes(x = impact, y = num),
                           color = pct$sig, size = 2) +
       # plot aesthetics
-      ggplot2::coord_cartesian(xlim = c(-0.25,1.1)) +
+      ggplot2::coord_cartesian(xlim = c(-0.3,1.1)) +
+      ggplot2::scale_x_continuous(breaks = seq(from = -0.3, to = 1.1, by = 0.1)) +
       ggplot2::scale_y_discrete(limits = c(0,model$rank)) +
       ggplot2::xlab("P-value") + ggplot2::ylab("Regression Variables") +
       ggplot2::theme(axis.text.y = ggplot2::element_blank()) +
