@@ -7,6 +7,7 @@
 #' @param model an lm() object
 #' @param measure use P-values (P) or coefficients (C) to construct plot
 #' @param signif significance level for P-values
+#' @param sorted whether the user wants to see the variables in order of entry or significance
 #'
 #' @return a ggplot2 object
 #'
@@ -25,7 +26,7 @@
 #'
 #' @export
 
-visualize <- function(model, measure = "P", signif = 0.05) {
+visualize <- function(model, measure = "P", signif = 0.05, sorted = T) {
 
   # Extract variable names
   var.names <- attr(model$model, "names")[2:model$rank]
@@ -57,10 +58,12 @@ visualize <- function(model, measure = "P", signif = 0.05) {
     impact = imp
   )
 
-  # sort by impact
-  pct <- switch(measure,
-                "P" = pct[order(pct$impact, decreasing = T),],
-                "C" = pct[order(abs(pct$impact), decreasing = F),])
+  if (sorted == T) {
+    # sort by impact
+    pct <- switch(measure,
+                  "P" = pct[order(pct$impact, decreasing = T),],
+                  "C" = pct[order(abs(pct$impact), decreasing = F),])
+  }
 
   # add the order
   pct$num <- 1:(model$rank-1)
