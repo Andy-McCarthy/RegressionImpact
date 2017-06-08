@@ -23,6 +23,7 @@
 #' visualize(model)
 #' visualize(model, signif = 0.1)
 #' visualize(model, measure = "C")
+#' visualize(model, measure = "C", sorted = F)
 #'
 #' @export
 
