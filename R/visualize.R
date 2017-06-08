@@ -27,7 +27,7 @@
 #'
 #' @export
 
-visualize <- function(model, measure = "P", signif = 0.05, sorted = T) {
+visualize <- function(model, measure = "P", signif = 0.05, sorted = TRUE) {
 
   # Extract variable names
   var.names <- attr(model$model, "names")[2:model$rank]
@@ -70,9 +70,11 @@ visualize <- function(model, measure = "P", signif = 0.05, sorted = T) {
   pct$num <- 1:(model$rank-1)
 
   # add the colors
-  pct$sig <- rep("black",nrow(pct))
-  for (j in 1:nrow(pct)) {
-    if (pct$impact[j] < signif) {pct$sig[j] <- "red"}
+  if (measure == "P") {
+    pct$sig <- rep("black",nrow(pct))
+    for (j in 1:nrow(pct)) {
+      if (pct$impact[j] < signif) {pct$sig[j] <- "red"}
+    }
   }
 
   # add variable labels
