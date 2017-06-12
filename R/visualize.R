@@ -68,8 +68,8 @@ visualize <- function(model, measure = "P", signif = 0.05, sorted = TRUE) {
                   "C" = pct[order(abs(pct$impact), decreasing = F),])
   }
 
-  # add the numbers to the pct data frame
-  pct$num <- 1:(model$rank-1)
+  # add the order to the pct data frame
+  pct$order <- 1:(model$rank-1)
 
   # add the colors
   if (measure == "P") {
@@ -88,7 +88,7 @@ visualize <- function(model, measure = "P", signif = 0.05, sorted = TRUE) {
   var.labs <- data.frame(
     name = pct$name,
     X.coord <- rep(X.val,nrow(pct)),
-    Y.coord <- pct$num
+    Y.coord <- pct$order
   )
 
   # plot results-----------------------------------------------------
@@ -101,7 +101,7 @@ visualize <- function(model, measure = "P", signif = 0.05, sorted = TRUE) {
       ggplot2::geom_vline(ggplot2::aes(xintercept = signif), color = "red") +
       ggplot2::geom_vline(ggplot2::aes(xintercept = 1), color = "skyblue") +
       # plot the actual P-values
-      ggplot2::geom_point(data = pct, ggplot2::aes(x = impact, y = num),
+      ggplot2::geom_point(data = pct, ggplot2::aes(x = impact, y = order),
                           color = pct$sig, size = 2) +
       # plot aesthetics
       ggplot2::coord_cartesian(xlim = c(-0.3,1.1)) +
@@ -115,7 +115,7 @@ visualize <- function(model, measure = "P", signif = 0.05, sorted = TRUE) {
       ggplot2::theme(legend.position = "none"),
 
     #Coefficients-------
-    "C" = ggplot2::ggplot(pct, ggplot2::aes(x = impact, y = num)) +
+    "C" = ggplot2::ggplot(data = pct, ggplot2::aes(x = impact, y = order)) +
       ggplot2::geom_text(ggplot2::aes(label=pct$name, size = 14)) +
       # guidelines at -1, 0, and 1
       ggplot2::geom_vline(ggplot2::aes(xintercept = 0), color = "red") +
