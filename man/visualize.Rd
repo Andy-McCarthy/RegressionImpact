@@ -13,15 +13,15 @@ visualize(model, measure = "P", signif = 0.05, sorted = TRUE)
 
 \item{signif}{significance level for P-values}
 
-\item{sorted}{whether the variables should be plotted in order of significance}
+\item{sorted}{whether the variables should be ordered by significance}
 }
 \value{
 a ggplot2 object
 }
 \description{
-Function to visually display the significance of each predictor variable in
-a regression. The function takes an lm() object as input and outputs a ggplot2-labeled
-figure.
+Function to visually display the significance of each predictor
+variable in a regression. The function takes an lm() object as input and
+outputs a ggplot2-labeled figure.
 }
 \examples{
 X <- runif(500,1,5)
