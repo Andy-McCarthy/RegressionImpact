@@ -60,12 +60,16 @@ visualize <- function(model, measure = "P", signif = 0.05, sorted = TRUE) {
     impact = imp
   )
 
+  # if the user chooses to have the variables sorted
   if (sorted == T) {
     # sort by impact
     pct <- switch(measure,
                   "P" = pct[order(pct$impact, decreasing = T),],
                   "C" = pct[order(abs(pct$impact), decreasing = F),])
   }
+
+  # add the numbers to the pct data frame
+  pct$num <- 1:(model$rank-1)
 
   # add the colors
   if (measure == "P") {
@@ -84,7 +88,7 @@ visualize <- function(model, measure = "P", signif = 0.05, sorted = TRUE) {
   var.labs <- data.frame(
     name = pct$name,
     X.coord <- rep(X.val,nrow(pct)),
-    Y.coord <- 1:(model$rank-1)
+    Y.coord <- pct$num
   )
 
   # plot results-----------------------------------------------------
