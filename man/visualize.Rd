@@ -4,7 +4,7 @@
 \alias{visualize}
 \title{Visualize Regression Variables}
 \usage{
-visualize(model, measure = "P", signif = 0.05)
+visualize(model, measure = "P", signif = 0.05, sorted = TRUE)
 }
 \arguments{
 \item{model}{an lm() object}
@@ -12,6 +12,8 @@ visualize(model, measure = "P", signif = 0.05)
 \item{measure}{use P-values (P) or coefficients (C) to construct plot}
 
 \item{signif}{significance level for P-values}
+
+\item{sorted}{whether the variables should be plotted in order of significance}
 }
 \value{
 a ggplot2 object
@@ -33,5 +35,6 @@ model <- lm(W~X+Y+Z)
 visualize(model)
 visualize(model, signif = 0.1)
 visualize(model, measure = "C")
+visualize(model, measure = "C", sorted = F)
 
 }

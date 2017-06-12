@@ -7,7 +7,7 @@
 #' @param model an lm() object
 #' @param measure use P-values (P) or coefficients (C) to construct plot
 #' @param signif significance level for P-values
-#' @param sorted whether the user wants to see the variables in order of entry or significance
+#' @param sorted whether the variables should be plotted in order of significance
 #'
 #' @return a ggplot2 object
 #'
@@ -29,13 +29,13 @@
 
 visualize <- function(model, measure = "P", signif = 0.05, sorted = TRUE) {
 
-  # Extract variable names
+  # extract variable names
   var.names <- attr(model$model, "names")[2:model$rank]
 
   # initialize impact
   imp <- rep(NA,(model$rank-1))
 
-  # depending on whether the user wants P-values or coefficients,
+  # depending on whether the user wants P-values or standardized coefficients,
   # determine what is to be plotted
   if (measure == "P") {
     imp <- summary(model)$coefficients[2:model$rank,4]
@@ -46,6 +46,7 @@ visualize <- function(model, measure = "P", signif = 0.05, sorted = TRUE) {
     for (i in 1:ncol(model$model)) {
       stdev[i] <- sd(model$model[,i])
     }
+    #
     imp <- coeff * stdev[2:model$rank]/stdev[1]
   } else {
     message("For the measure argument, please enter 'P' for P-values or 'C' for")
@@ -66,9 +67,6 @@ visualize <- function(model, measure = "P", signif = 0.05, sorted = TRUE) {
                   "C" = pct[order(abs(pct$impact), decreasing = F),])
   }
 
-  # add the order
-  pct$num <- 1:(model$rank-1)
-
   # add the colors
   if (measure == "P") {
     pct$sig <- rep("black",nrow(pct))
@@ -77,17 +75,22 @@ visualize <- function(model, measure = "P", signif = 0.05, sorted = TRUE) {
     }
   }
 
-  # add variable labels
+  # determine longest variable name
+  str.l <- max(nchar(var.names))
+  # calculate X center for names
+  X.val <- -0.1 - 0.005*str.l
+
+  # construct variable names/locations data frame
   var.labs <- data.frame(
     name = pct$name,
-    X <- rep(-0.1,nrow(pct)),
-    Y <- pct$num
+    X.coord <- rep(X.val,nrow(pct)),
+    Y.coord <- 1:(model$rank-1)
   )
 
   # plot results-----------------------------------------------------
   gg.p <- switch(measure,
     #P-value------------
-    "P" = ggplot2::ggplot(data = var.labs, ggplot2::aes(x = X, y = Y)) +
+    "P" = ggplot2::ggplot(data = var.labs, ggplot2::aes(x = X.coord, y = Y.coord)) +
       ggplot2::geom_text(ggplot2::aes(label=var.labs$name, size = 14))  +
       # guidelines at 0, 1, and the significance level
       ggplot2::geom_vline(ggplot2::aes(xintercept = 0), color = "skyblue") +
@@ -98,7 +101,8 @@ visualize <- function(model, measure = "P", signif = 0.05, sorted = TRUE) {
                           color = pct$sig, size = 2) +
       # plot aesthetics
       ggplot2::coord_cartesian(xlim = c(-0.3,1.1)) +
-      ggplot2::scale_x_continuous(breaks = seq(from = -0.3, to = 1.1, by = 0.1)) +
+      ggplot2::scale_x_continuous(breaks = seq(from = -0.3, to = 1.1, by = 0.1),
+                                  labels = round(seq(from = -0.3, to = 1.1, by = 0.1),1)) +
       ggplot2::scale_y_discrete(limits = c(0,model$rank)) +
       ggplot2::xlab("P-value") + ggplot2::ylab("Regression Variables") +
       ggplot2::theme(axis.text.y = ggplot2::element_blank()) +
