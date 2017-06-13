@@ -86,26 +86,23 @@ visualize <- function(model, measure = "P", signif = 0.05, sorted = TRUE) {
       ggplot2::scale_x_continuous(breaks = seq(from = 0, to = 1, by = 0.1),
                           labels = round(seq(from = 0, to = 1, by = 0.1),1)) +
       ggplot2::xlab("P-value") + ggplot2::ylab("Regression Variables") +
-      ggplot2::theme(axis.text.x = ggplot2::element_text(size = 12),
-                     axis.text.y = ggplot2::element_text(size = 12),
+      ggplot2::theme(axis.text = ggplot2::element_text(size = 12),
                      legend.position = "none"),
 
     #Coefficients-------
-    "C" = ggplot2::ggplot(data = pct,
+    "C" = ggplot2::ggplot() +
+          ggplot2::geom_point(data = pct,
                    ggplot2::aes(x = impact, y = reorder(name,abs(impact)))) +
-      ggplot2::geom_text(ggplot2::aes(label=pct$name, size = 14)) +
       # guidelines at -1, 0, and 1
       ggplot2::geom_vline(ggplot2::aes(xintercept = 0), color = "red") +
       ggplot2::geom_vline(ggplot2::aes(xintercept = -1), color = "skyblue") +
       ggplot2::geom_vline(ggplot2::aes(xintercept = 1), color = "skyblue") +
-      # # other plot aesthetics
+      # other plot aesthetics
       ggplot2::scale_x_continuous(limits = c(min(-1,-max(abs(pct$impact))-.1),
                                              max(1,max(abs(pct$impact))+.1))) +
       ggplot2::xlab("Standardized Coefficient") +
       ggplot2::ylab("Regression Variables") +
-      ggplot2::theme(axis.text.y = ggplot2::element_blank(),
-                     axis.ticks.y = ggplot2::element_blank(),
-                     axis.text.x = ggplot2::element_text(size = 12),
+      ggplot2::theme(axis.text = ggplot2::element_text(size = 12),
                      legend.position = "none")
   )
   # IF THE PLOT SHOULD NOT BE SORTED
@@ -125,14 +122,12 @@ visualize <- function(model, measure = "P", signif = 0.05, sorted = TRUE) {
       ggplot2::scale_x_continuous(breaks = seq(from = 0, to = 1, by = 0.1),
                           labels = round(seq(from = 0, to = 1, by = 0.1),1)) +
       ggplot2::xlab("P-value") + ggplot2::ylab("Regression Variables") +
-      ggplot2::theme(axis.text.x = ggplot2::element_text(size = 12),
-                     axis.text.y = ggplot2::element_text(size = 12),
+      ggplot2::theme(axis.text = ggplot2::element_text(size = 12),
                      legend.position = "none"),
 
       #Coefficients-------
-      "C" = ggplot2::ggplot(data = pct,
-                        ggplot2::aes(x = impact, y = reorder(name,-order))) +
-      ggplot2::geom_text(ggplot2::aes(label=pct$name, size = 14)) +
+      "C" = ggplot2::ggplot() +
+            ggplot2::geom_point(ggplot2::aes(x = impact, y = reorder(name,-order))) +
       # guidelines at -1, 0, and 1
       ggplot2::geom_vline(ggplot2::aes(xintercept = 0), color = "red") +
       ggplot2::geom_vline(ggplot2::aes(xintercept = -1), color = "skyblue") +
@@ -142,9 +137,7 @@ visualize <- function(model, measure = "P", signif = 0.05, sorted = TRUE) {
                                              max(1,max(abs(pct$impact))+.1))) +
       ggplot2::xlab("Standardized Coefficient") +
       ggplot2::ylab("Regression Variables") +
-      ggplot2::theme(axis.text.y = ggplot2::element_blank(),
-                     axis.ticks.y = ggplot2::element_blank(),
-                     axis.text.x = ggplot2::element_text(size = 12),
+      ggplot2::theme(axis.text = ggplot2::element_text(size = 12),
                      legend.position = "none")
     )
   }
