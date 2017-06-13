@@ -127,7 +127,8 @@ visualize <- function(model, measure = "P", signif = 0.05, sorted = TRUE) {
 
       #Coefficients-------
       "C" = ggplot2::ggplot() +
-            ggplot2::geom_point(ggplot2::aes(x = impact, y = reorder(name,-order))) +
+            ggplot2::geom_point(data = pct,
+                                ggplot2::aes(x = impact, y = reorder(name,-order))) +
       # guidelines at -1, 0, and 1
       ggplot2::geom_vline(ggplot2::aes(xintercept = 0), color = "red") +
       ggplot2::geom_vline(ggplot2::aes(xintercept = -1), color = "skyblue") +
